@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS) // To allow @BeforeAll without static
 class BaseRestAssuredTest {
 
-    @Value("${test.api.base-url:http://localhost:8080/api}")
+    @Value("${test.api.base-url:http://localhost:8081/rest}")
     private String baseUrl;
 
     @BeforeAll

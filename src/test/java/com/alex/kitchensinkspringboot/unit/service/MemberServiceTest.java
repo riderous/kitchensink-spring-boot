@@ -2,10 +2,8 @@ package com.alex.kitchensinkspringboot.service;
 
 import com.alex.kitchensinkspringboot.dto.MemberCreateDTO;
 import com.alex.kitchensinkspringboot.dto.MemberDTO;
-import com.alex.kitchensinkspringboot.exception.DuplicateEmailException;
 import com.alex.kitchensinkspringboot.model.Member;
 import com.alex.kitchensinkspringboot.repository.MemberRepository;
-import jakarta.validation.ValidationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,8 +43,6 @@ class MemberServiceTest {
     // ✅ Test Case: Create Member Successfully
     @Test
     void testCreateMember_Success() {
-        // Mock: No member exists with this email
-        when(memberRepository.findByEmail(member.getEmail())).thenReturn(Optional.empty());
         when(memberRepository.save(any(Member.class))).thenReturn(member);
 
         // Act
@@ -61,25 +57,6 @@ class MemberServiceTest {
 
         // Verify: `save()` was called once
         verify(memberRepository, times(1)).save(any(Member.class));
-    }
-
-    // ✅ Test Case: Prevent Duplicate Email
-    @Test
-    void testCreateMember_DuplicateEmail_ShouldThrowException() {
-        // Mock: Email already exists
-        when(memberRepository.findByEmail(member.getEmail())).thenReturn(Optional.of(member));
-
-        // Act & Assert
-        Exception exception = assertThrows(DuplicateEmailException.class, () ->
-                memberService.register(new MemberCreateDTO(
-                        "John Doe", "john.doe@example.com", "1234567890"
-                ))
-        );
-
-        assertEquals("Email already exists", exception.getMessage());
-
-        // Verify: `save()` was never called
-        verify(memberRepository, never()).save(any(Member.class));
     }
 
     // ✅ Test Case: Get All Members

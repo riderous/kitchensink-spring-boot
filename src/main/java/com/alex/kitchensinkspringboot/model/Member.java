@@ -19,7 +19,7 @@ public class Member {
 
     @NotBlank
     @Size(min = 1, max = 25)
-    @Pattern(regexp = "[^0-9]*", message = "Must not contain numbers")
+    @Pattern(regexp = "[^0-9]*")
     private String name;
 
     @NotBlank
@@ -28,7 +28,7 @@ public class Member {
 
     @NotBlank
     @Size(min = 10, max = 12)
-    @Pattern(regexp = "\\d+", message = "Phone number must contain only digits")
+    @Pattern(regexp = "\\d+")
     @Column(name = "phone_number")
     private String phoneNumber;
 }

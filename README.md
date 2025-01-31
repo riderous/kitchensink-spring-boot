@@ -5,4 +5,5 @@ TODO
 
 # Notes
 no delete method
+kept frontend monolithic
 

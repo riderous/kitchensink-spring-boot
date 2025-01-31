@@ -3,7 +3,6 @@ package com.alex.kitchensinkspringboot.service;
 
 import com.alex.kitchensinkspringboot.dto.MemberCreateDTO;
 import com.alex.kitchensinkspringboot.dto.MemberDTO;
-import com.alex.kitchensinkspringboot.exception.DuplicateEmailException;
 import com.alex.kitchensinkspringboot.model.Member;
 import com.alex.kitchensinkspringboot.repository.MemberRepository;
 import lombok.AllArgsConstructor;
@@ -34,9 +33,6 @@ public class MemberService {
     @Transactional  // Replaces @Stateless for transaction management
     public MemberDTO register(MemberCreateDTO memberCreateDTO) {
         log.info("Registering member: {}", memberCreateDTO.name());
-        if (memberRepository.findByEmail(memberCreateDTO.email()).isPresent()) {
-            throw new DuplicateEmailException("Email already exists");
-        }
 
         Member member = Member.builder()
                 .name(memberCreateDTO.name())

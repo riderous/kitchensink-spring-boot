@@ -45,7 +45,7 @@ class MemberRestControllerTest {
 
     @Test
     void testListAllMembers() throws Exception {
-        mockMvc.perform(get("/api/members"))
+        mockMvc.perform(get("/rest/members"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name").value("Jane Smith"))
                 .andExpect(jsonPath("$[1].name").value("John Doe"))
@@ -56,7 +56,7 @@ class MemberRestControllerTest {
     void testGetMemberById() throws Exception {
         Member member = memberRepository.findAll().getFirst(); // Retrieve the first member for testing
 
-        mockMvc.perform(get("/api/members/" + member.getId()))
+        mockMvc.perform(get("/rest/members/" + member.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value(member.getName()))
                 .andExpect(jsonPath("$.email").value(member.getEmail()));
@@ -64,7 +64,7 @@ class MemberRestControllerTest {
 
     @Test
     void testGetMemberById_NotFound() throws Exception {
-        mockMvc.perform(get("/api/members/42"))
+        mockMvc.perform(get("/rest/members/42"))
                 .andExpect(status().isNotFound());
     }
 
@@ -78,7 +78,7 @@ class MemberRestControllerTest {
                 }
                 """;
 
-        mockMvc.perform(post("/api/members")
+        mockMvc.perform(post("/rest/members")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(newMemberJson))
                 .andExpect(status().is2xxSuccessful())
@@ -98,16 +98,16 @@ class MemberRestControllerTest {
                 }
                 """;
 
-        mockMvc.perform(post("/api/members")
+        mockMvc.perform(post("/rest/members")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(newMemberJson))
                 .andExpect(status().is2xxSuccessful());
 
 
-        mockMvc.perform(post("/api/members")
+        mockMvc.perform(post("/rest/members")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(newMemberJson))
-                .andExpect(status().isConflict());
+                .andExpect(status().is4xxClientError());
 
         assert memberRepository.count() == 3;
     }
