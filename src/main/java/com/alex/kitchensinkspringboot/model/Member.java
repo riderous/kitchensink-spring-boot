@@ -1,21 +1,23 @@
 package com.alex.kitchensinkspringboot.model;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
-@Table(name = "member", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Document(collection = "members") // ✅ Collection name in MongoDB
 public class Member {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     @NotBlank
     @Size(min = 1, max = 25)
@@ -29,6 +31,5 @@ public class Member {
     @NotBlank
     @Size(min = 10, max = 12)
     @Pattern(regexp = "\\d+")
-    @Column(name = "phone_number")
     private String phoneNumber;
 }

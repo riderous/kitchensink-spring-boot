@@ -26,7 +26,7 @@ public class MemberService {
                 .toList();
     }
 
-    public Optional<MemberDTO> getMemberById(Long id) {
+    public Optional<MemberDTO> getMemberById(String id) {
         return memberRepository.findById(id).map(this::convertToDTO);
     }
 

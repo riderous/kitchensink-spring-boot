@@ -1,0 +1,46 @@
+version: '3.9'
+services:
+  mongodb:
+    image: mongo:5
+    command: --replSet rs0
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: kitchensink
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/admin --quiet
+      interval: 2s
+      timeout: 3s
+      retries: 5
+
+  mongo-init:
+    image: mongo:5
+    restart: "no"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    command: >
+      mongo --host mongodb:27017 --eval
+      '
+      rs.initiate( {
+         _id : "rs0",
+         members: [
+            { _id: 0, host: "localhost:27017" }
+         ]
+      })
+      '
+  spring-app:
+    build: .
+    container_name: spring-boot-app
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/kitchensink?authSource=admin&retryWrites=false
+    depends_on:
+      - mongodb
+
+volumes:
+  mongo_data:

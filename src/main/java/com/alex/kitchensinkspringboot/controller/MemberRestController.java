@@ -24,7 +24,7 @@ public class MemberRestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MemberDTO> getMemberById(@PathVariable Long id) {
+    public ResponseEntity<MemberDTO> getMemberById(@PathVariable String id) {
         return memberService.getMemberById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

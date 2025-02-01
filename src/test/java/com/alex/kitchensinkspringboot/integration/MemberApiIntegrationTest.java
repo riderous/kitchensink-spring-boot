@@ -1,6 +1,7 @@
 package com.alex.kitchensinkspringboot.integration;
 
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
@@ -10,6 +11,7 @@ import java.util.Map;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
+@Tag("integration")
 class MemberApiIntegrationTest extends BaseRestAssuredTest {
 
     @Test
@@ -25,9 +27,9 @@ class MemberApiIntegrationTest extends BaseRestAssuredTest {
                 .statusCode(HttpStatus.OK.value())
                 .extract().jsonPath().getList("$");
 
-        Integer memberId = members.stream()
+        String memberId = members.stream()
                 .filter(member -> memberEmail.equals(String.valueOf(member.get("email"))))
-                .map(member -> ((Number) member.get("id")).intValue())
+                .map(member -> member.get("id").toString())
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Member not found with email: " + memberEmail));
 

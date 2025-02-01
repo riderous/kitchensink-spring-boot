@@ -7,9 +7,7 @@ import com.alex.kitchensinkspringboot.repository.MemberRepository;
 import com.alex.kitchensinkspringboot.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -24,7 +22,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(MemberController.class) // ✅ Load only the web layer
-@ExtendWith(MockitoExtension.class) // ✅ Use MockitoExtension for mocking
 class MemberControllerTest {
 
     @Autowired
@@ -41,8 +38,8 @@ class MemberControllerTest {
     @BeforeEach
     void setUp() {
         mockMembers = List.of(
-                new MemberDTO(1L, "Alice", "alice@example.com", "1234567890"),
-                new MemberDTO(2L, "Bob", "bob@example.com", "1234567890")
+                new MemberDTO("1L", "Alice", "alice@example.com", "1234567890"),
+                new MemberDTO("2L", "Bob", "bob@example.com", "1234567890")
         );
     }
 
@@ -63,7 +60,7 @@ class MemberControllerTest {
     void testCreateMember_Success() throws Exception {
         MemberCreateDTO validMember = new MemberCreateDTO("John Doe", "john@example.com", "1234567890");
 
-        when(memberService.register(Mockito.any(MemberCreateDTO.class))).thenReturn(new MemberDTO(1L,
+        when(memberService.register(Mockito.any(MemberCreateDTO.class))).thenReturn(new MemberDTO("1L",
                 validMember.name(), validMember.email(), validMember.phoneNumber()));
 
         mockMvc.perform(post("/members/register")

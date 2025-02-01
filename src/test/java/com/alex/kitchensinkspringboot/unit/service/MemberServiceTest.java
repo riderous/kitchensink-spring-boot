@@ -33,7 +33,7 @@ class MemberServiceTest {
     void setUp() {
         // ✅ Sample Member
         member = Member.builder()
-                .id(1L)
+                .id("1L")
                 .name("John Doe")
                 .email("john.doe@example.com")
                 .phoneNumber("1234567890")
@@ -81,32 +81,32 @@ class MemberServiceTest {
     @Test
     void testGetMemberById_Found() {
         // Mock: Member exists
-        when(memberRepository.findById(1L)).thenReturn(Optional.of(member));
+        when(memberRepository.findById("1L")).thenReturn(Optional.of(member));
 
         // Act
-        Optional<MemberDTO> foundMember = memberService.getMemberById(1L);
+        Optional<MemberDTO> foundMember = memberService.getMemberById("1L");
 
         // Assert
         assertTrue(foundMember.isPresent());
         assertEquals("John Doe", foundMember.get().name());
 
         // Verify: `findById()` was called once
-        verify(memberRepository, times(1)).findById(1L);
+        verify(memberRepository, times(1)).findById("1L");
     }
 
     // ✅ Test Case: Get Member By ID (Not Found)
     @Test
     void testGetMemberById_NotFound() {
         // Mock: Member not found
-        when(memberRepository.findById(1L)).thenReturn(Optional.empty());
+        when(memberRepository.findById("1L")).thenReturn(Optional.empty());
 
         // Act
-        Optional<MemberDTO> foundMember = memberService.getMemberById(1L);
+        Optional<MemberDTO> foundMember = memberService.getMemberById("1L");
 
         // Assert
         assertFalse(foundMember.isPresent());
 
         // Verify: `findById()` was called once
-        verify(memberRepository, times(1)).findById(1L);
+        verify(memberRepository, times(1)).findById("1L");
     }
 }
