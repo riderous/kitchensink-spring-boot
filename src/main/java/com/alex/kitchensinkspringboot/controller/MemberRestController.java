@@ -5,6 +5,7 @@ import com.alex.kitchensinkspringboot.dto.MemberDTO;
 import com.alex.kitchensinkspringboot.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +34,6 @@ public class MemberRestController {
     @PostMapping
     public ResponseEntity<MemberDTO> createMember(@Valid @RequestBody MemberCreateDTO memberCreateDTO) {
         MemberDTO savedMember = memberService.register(memberCreateDTO);
-        return ResponseEntity.status(200).body(savedMember); // ✅ Use 200 to match old API
+        return ResponseEntity.status(HttpStatus.OK).body(savedMember); // ✅ Use 200 to match old API
     }
 }

@@ -7,8 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -18,19 +16,21 @@ public class H2ToMongoMigrationService {
     private final MemberRepository memberRepository; // ✅ Saves to MongoDB
 
     public void migrate() {
-        // Step 1: Read all members from H2
-        List<Member> members = jdbcTemplate.query(
-                "SELECT name, email, phone_number FROM MEMBER",
-                (rs, rowNum) -> Member.builder()
-                        .name(rs.getString("name"))
-                        .email(rs.getString("email"))
-                        .phoneNumber(rs.getString("phone_number"))
-                        .build()
+        log.info("✅ Starting migration...");
+
+        jdbcTemplate.query("SELECT name, email, phone_number FROM MEMBER",
+                rs -> {
+                    Member member = Member.builder()
+                            .name(rs.getString("name"))
+                            .email(rs.getString("email"))
+                            .phoneNumber(rs.getString("phone_number"))
+                            .build();
+
+                    memberRepository.save(member); // ✅ Saves each record immediately
+                    log.debug("✅ Migrated: {}", member.getEmail());
+                }
         );
 
-        // Step 2: Save them into MongoDB
-        memberRepository.saveAll(members);
-
-        log.info("✅ Migrated {} members from H2 to MongoDB.", members.size());
+        log.info("🚀 Migration completed!");
     }
 }

@@ -17,4 +17,7 @@ public record MemberCreateDTO(
         @Digits(fraction = 0, integer = 12)
         String phoneNumber
 ) {
+    public static MemberCreateDTO empty() {
+        return new MemberCreateDTO("", "", "");
+    }
 }

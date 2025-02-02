@@ -23,7 +23,7 @@ public class MemberController {
     public String listAllMembers(Model model) {
         List<MemberDTO> members = memberService.getAllMembers();
         model.addAttribute("members", members);
-        model.addAttribute("newMember", new MemberCreateDTO("", "", ""));
+        model.addAttribute("newMember", MemberCreateDTO.empty());
         return "index";
     }
 

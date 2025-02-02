@@ -9,7 +9,7 @@ docker-compose up --build
 http://localhost:8081/members
 mvn test -PallTests
 
-#### Againt the running legacy app
+#### Against the running legacy app
 mvn test -PallTests -Dspring.profiles.active=legacy-test
 
 ### Remove MongoDB volume
@@ -22,3 +22,4 @@ docker volume rm kitchensink-spring-boot_mongo_data
 - kept frontend monolithic
 - first added tests and migrated using h2 db, then switch to MongoDB
 - kept h2 and dependencies for the migration
+- added index on name field to speed up findAllByOrderByNameAsc (has also drawbacks)
